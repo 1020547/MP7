@@ -215,14 +215,39 @@ public class Transform {
      * @return the rotated image
      */
     public static int[][] flipVertical(final int[][] originalImage) {
-        int[][] newImage = new int[originalImage.length][originalImage[0].length];
-        for (int x = 0; x < newImage.length; x++) {
-            for (int y = 0; y < newImage[x].length; y++) {
-                newImage[x][(originalImage[x].length - y) - 1] = originalImage[x][y];
-            }
-        }
+        int[][] newArray = new int[originalImage.length][originalImage[0].length];
 
-        return newImage;
+        for (int indexX = 0; indexX < originalImage.length; indexX++) {
+            for (int indexY = 0; indexY < originalImage[0].length; indexY++) {
+                int red = findRed(originalImage[indexX][indexY]);
+                int blue = findBlue(originalImage[indexX][indexY]);
+                int green = findGreen(originalImage[indexX][indexY]);
+                int alpha = findAlpha(originalImage[indexX][indexY]);
+
+                final int three = 3;
+                final int twentyfour = 24;
+                final int sixteen = 16;
+                final int eight = 8;
+
+                int average = (red + blue + green) / three;
+
+                red = average;
+                blue = average;
+                green = average;
+
+                newArray[indexX][indexY] = (alpha << twentyfour)
+                        | (blue << sixteen) | (green << eight) | (red);
+
+            }
+
+        }
+//        for (int indexY = 0; indexY < originalImage[0].length; indexY++) {
+//            for (int indexX = 0; indexX < originalImage.length; indexX++) {
+//
+//            }
+//        }
+        return newArray;
+
     }
 
     /**
@@ -232,15 +257,34 @@ public class Transform {
      * @return the rotated image
      */
     public static int[][] flipHorizontal(final int[][] originalImage) {
-        int[][] newImage = new int[originalImage.length][originalImage[0].length];
-        for (int x = 0; x < newImage.length; x++) {
-            for (int y = 0; y < newImage[x].length; y++) {
-                newImage[(originalImage.length - x) - 1][y] = originalImage[x][y];
+        int[][] newArray = new int[originalImage.length][originalImage[0].length];
+        for (int indexX = 0; indexX < originalImage.length; indexX++) {
+            for (int indexY = 0; indexY < originalImage[0].length; indexY++) {
+                int red = findRed(originalImage[indexX][indexY]);
+                int blue = findBlue(originalImage[indexX][indexY]);
+                int green = findGreen(originalImage[indexX][indexY]);
+                int alpha = findAlpha(originalImage[indexX][indexY]);
 
+                final int three = 3;
+                final int twentyfour = 24;
+                final int sixteen = 16;
+                final int eight = 8;
+
+                if (red > green && red > blue) {
+                    newArray[indexX][indexY] = originalImage[indexX][indexY];
+                } else {
+                    int average = (red + blue + green) / three;
+                    blue = average;
+                    green = average;
+                    red = average;
+                }
+                newArray[indexX][indexY] = (alpha << twentyfour)
+                        | (blue << sixteen) | (green << eight) | (red);
             }
-        }
 
-        return newImage;
+        }
+        return newArray;
+
     }
 
     /**
@@ -479,6 +523,50 @@ public class Transform {
     public static int[][] shrinkVertical(final int[][] originalImage, final int amount) {
         return null;
     }
+    public static int findRed(final int color) {
+        final int fullColor = 0xFF;
+        return (color & fullColor);
+    }
+
+    /**
+     *adfs.
+     * @param color afd
+     * @return adfs
+     */
+
+    public static int findGreen(final int color) {
+        final int fullColor = 0xFF;
+        final int eight = 8;
+        int newColor = color >> eight;
+        return (fullColor & newColor);
+    }
+
+    /**
+     *ajif.
+     * @param color ijadf
+     * @return jldaks
+     */
+
+    public static int findBlue(final int color) {
+        final int fullColor = 0xFF;
+        final int sixteen = 16;
+        int newColor = color >> sixteen;
+        return (fullColor & newColor);
+    }
+
+    /**
+     *jaidfl.
+     * @param color jaf
+     * @return joaisd;f
+     */
+
+    public static int findAlpha(final int color) {
+        final int fullColor = 0xFF;
+        final int twentyfour = 24;
+        int newColor = color >> twentyfour;
+        return (fullColor & newColor);
+    }
+
 
     /**
      * Expand in the vertical axis around the image center.
